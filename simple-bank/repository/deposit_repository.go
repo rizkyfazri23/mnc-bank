@@ -78,7 +78,6 @@ func (r *DepositRepositoryImpl) MakeDeposit(newDeposit *entity.DepositRequest, u
 		log.Println("funds transferred")
 	}
 
-	// create transaction log
 	transactionLog := &entity.TransactionLog{
 		UserID:          user_id,
 		TransactionCode: deposit.Deposit_Code,

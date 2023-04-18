@@ -36,7 +36,6 @@ func (r *PaymentRepositoryImpl) CreatePayment(newPayment *entity.PaymentInfo, se
 		return entity.Payment{}, err
 	}
 
-	// check penerima
 	var receiptId int
 	if err := r.db.Model(&entity.User{}).Where("username = ?", newPayment.ReceiptUsername).Select("user_id").Take(&receiptId).Error; err != nil {
 		log.Println(err)
@@ -93,7 +92,6 @@ func (r *PaymentRepositoryImpl) CreatePayment(newPayment *entity.PaymentInfo, se
 		log.Println("funds received")
 	}
 
-	// create transaction log
 	transactionLog := &entity.TransactionLog{
 		UserID:          payment.Sender_Id,
 		TransactionCode: payment.Payment_Code,

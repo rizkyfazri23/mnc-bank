@@ -1,10 +1,5 @@
 package entity
 
-// import (
-// 	"golang.org/x/crypto/bcrypt"
-// 	_ "github.com/lib/pq"
-// ) 
-
 type Member struct {
 	Member_Id      int     `json:"member_id"`
 	Username       string  `json:"username"`
@@ -16,9 +11,7 @@ type Member struct {
 }
 
 type MemberLogin struct {
-	Member_Id int 	`json:"member_id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Member_Id int    `json:"member_id"`
+	Username  string `json:"username"`
+	Password  string `json:"password"`
 }
-
-

@@ -98,7 +98,6 @@ func (r *userRepo) FindOne(id int) (entity.User, error) {
 }
 
 func (r *userRepo) Create(newUser *entity.User) (entity.User, error) {
-	// Mulai transaction
 	tx := r.db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -106,7 +105,6 @@ func (r *userRepo) Create(newUser *entity.User) (entity.User, error) {
 		}
 	}()
 
-	// Enkripsi password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return entity.User{}, err
@@ -114,14 +112,12 @@ func (r *userRepo) Create(newUser *entity.User) (entity.User, error) {
 
 	newUser.Password = string(hashedPassword)
 
-	// Buat user baru
 	err = tx.Model(&entity.User{}).Omit("user_id", "amount").Create(newUser).Error
 	if err != nil {
 		tx.Rollback()
 		return entity.User{}, err
 	}
 
-	// Ambil ID terakhir dari insert data table users
 	var lastUser entity.User
 	err = tx.Last(&lastUser).Error
 	if err != nil {
@@ -129,7 +125,6 @@ func (r *userRepo) Create(newUser *entity.User) (entity.User, error) {
 		return entity.User{}, err
 	}
 
-	// Buat wallet baru untuk user
 	wallet := entity.Wallet{
 		User_Id: lastUser.User_Id,
 		Amount:  0,
@@ -140,7 +135,6 @@ func (r *userRepo) Create(newUser *entity.User) (entity.User, error) {
 		return entity.User{}, err
 	}
 
-	// Commit transaction
 	err = tx.Commit().Error
 	if err != nil {
 		tx.Rollback()
@@ -168,7 +162,6 @@ func (r *userRepo) Update(user *entity.User, userId int) (entity.User, error) {
 
 	userInDb.Username = user.Username
 
-	// Enkripsi password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return entity.User{}, err

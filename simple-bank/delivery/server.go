@@ -57,7 +57,7 @@ func Server() *AppServer {
 	r := gin.Default()
 	c := config.NewConfig()
 	infraManager := manager.NewInfraManager(c)
-	db := infraManager.DB() // Mendapatkan instance *gorm.DB
+	db := infraManager.DB()
 	repoManager := manager.NewRepoManager(db)
 	usecaseManager := manager.NewUsecaseManager(repoManager)
 	host := fmt.Sprintf(":%s", c.ApiPort)
